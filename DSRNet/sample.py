@@ -129,7 +129,7 @@ def sample(net, device, dataset, cfg):
     mean_psnr1 = 0
     mean_psnr2 = 0
     mean_ssim = 0
-    for step, (hr, lr, name) in enumerate(dataset):
+    for step, (lr, name) in enumerate(dataset):
         if "DIV2K1" in dataset.name:
             t1 = time.time()
             h, w = lr.size()[1:]
@@ -167,33 +167,14 @@ def sample(net, device, dataset, cfg):
                               cfg.test_data_dir.split("/")[-1],
                               "x{}".format(cfg.scale),
                               "SR")
-        hr_dir = os.path.join(cfg.sample_dir,
-                              model_name,
-                              cfg.test_data_dir.split("/")[-1],
-                              "x{}".format(cfg.scale),
-                              "HR")
         if not os.path.exists(sr_dir):
             # os.makedirs(sr_dir, exist_ok=Ture)  #it is given at first, but it is wrong. So, I mark it.
             # os.makedirs(hr_dir, exist_ok=Ture)
             os.makedirs(sr_dir, mode=0o777)
-        if not os.path.exists(hr_dir):
-            os.makedirs(hr_dir, mode=0o777)
 
         sr_im_path = os.path.join(sr_dir, "{}".format(
             name.replace("HR", "SR")))  # use SR instead of HR in the name of high-resolution image
-        hr_im_path = os.path.join(hr_dir, "{}".format(name))  # name is a name of high-resolution image
         save_image(sr, sr_im_path)
-        save_image(hr, hr_im_path)
-        hr = hr.cpu().mul(255).clamp(0, 255).byte().permute(1, 2, 0).numpy()
-        sr = sr.cpu().mul(255).clamp(0, 255).byte().permute(1, 2, 0).numpy()
-        bnd = scale
-        sr_1 = rgb2ycbcr(sr)
-        hr_1 = rgb2ycbcr(hr)
-        psnr_value = psnr(sr_1, hr_1)
-        ssim_value = calculate_ssim(sr_1, hr_1)
-        mean_psnr2 += psnr_value / len(dataset)
-        mean_ssim += ssim_value / len(dataset)
-        print(step, psnr_value, ssim_value)
     print(mean_psnr2, mean_ssim)
 
 

@@ -98,7 +98,6 @@ class TestDataset(data.Dataset):
             self.hr = glob.glob(os.path.join(dirname, "HR", "*.png"))
             self.lr = glob.glob(os.path.join(dirname, "bicubic_x{}".format(scale), "*.png"))
 
-        self.hr.sort()
         self.lr.sort()
 
         self.transform = transforms.Compose([
@@ -111,7 +110,7 @@ class TestDataset(data.Dataset):
         hr = hr.convert("RGB")
         lr = lr.convert("RGB")
         filename = self.hr[index].split("/")[-1]
-        return self.transform(hr), self.transform(lr), filename
+        return self.transform(lr), filename
 
     def __len__(self):
         return len(self.hr)
