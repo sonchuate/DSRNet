@@ -27,11 +27,11 @@ class Attention_SEblock(nn.Module):
 
 
 class Net(nn.Module):
-    def __init__(self, **kwargs):
+    def __init__(self, kwargs):
         super(Net, self).__init__()
 
-        scale = kwargs.get("scale")  # value of scale is scale.
-        multi_scale = kwargs.get("multi_scale")  # value of multi_scale is multi_scale in args.
+        scale = kwargs.scale  # value of scale is scale.
+        multi_scale = False  # value of multi_scale is multi_scale in args.
         kernel_size = 3
         kernel_size1 = 1
         # padding1 = 0
