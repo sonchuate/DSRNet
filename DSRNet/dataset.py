@@ -109,7 +109,7 @@ class TestDataset(data.Dataset):
         lr = Image.open(self.lr[index])
         hr = hr.convert("RGB")
         lr = lr.convert("RGB")
-        filename = self.hr[index].split("/")[-1]
+        filename = self.lr[index].split("/")[-1]
         return self.transform(lr), filename
 
     def __len__(self):
